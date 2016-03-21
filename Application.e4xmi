@@ -1,28 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_6wlLcMgZEeSyMNYR5xypkQ" elementId="MoneyCounter.application" bindingContexts="_6wlLecgZEeSyMNYR5xypkQ">
-  <children xsi:type="basic:TrimmedWindow" xmi:id="_6wlLccgZEeSyMNYR5xypkQ" elementId="MoneyCounter.window.main" label="Eclipse 4 RCP Application" width="500" height="400">
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_6wlLccgZEeSyMNYR5xypkQ" elementId="MoneyCounter.window.main" label="Деньгосчитатель" width="500" height="400">
     <tags>shellMaximized</tags>
     <children xsi:type="advanced:PerspectiveStack" xmi:id="_6wlLkMgZEeSyMNYR5xypkQ" elementId="org.eclipse.ui.ide.perspectivestack">
-      <children xsi:type="advanced:Perspective" xmi:id="_6wlLkcgZEeSyMNYR5xypkQ" elementId="MoneyCounter.perspective.sample">
+      <children xsi:type="advanced:Perspective" xmi:id="_6wlLkcgZEeSyMNYR5xypkQ" elementId="MoneyCounter.perspective.tableperspective" label="Таблица">
         <children xsi:type="basic:PartSashContainer" xmi:id="_6wlLksgZEeSyMNYR5xypkQ" elementId="MoneyCounter.partsashcontainer.sample">
           <children xsi:type="basic:PartStack" xmi:id="_6wlLk8gZEeSyMNYR5xypkQ" elementId="MoneyCounter.partstack.sample">
-            <children xsi:type="basic:Part" xmi:id="_6wlLlMgZEeSyMNYR5xypkQ" elementId="MoneyCounter.part.sample" contributionURI="bundleclass://MoneyCounter/moneycounter.parts.SamplePart" label="Sample Part"/>
+            <children xsi:type="basic:Part" xmi:id="_6wlLlMgZEeSyMNYR5xypkQ" elementId="MoneyCounter.part.table" contributionURI="bundleclass://MoneyCounter/moneycounter.parts.SamplePart" label="Таблица"/>
+          </children>
+        </children>
+      </children>
+      <children xsi:type="advanced:Perspective" xmi:id="_uNP3cO9mEeW_f7WtwrYbtg" elementId="MoneyCounter.perspective.calendarperspective" label="Календарь">
+        <children xsi:type="basic:PartSashContainer" xmi:id="_3-UBgO9pEeW_f7WtwrYbtg" elementId="moneycounter.partsashcontainer.calendar">
+          <children xsi:type="basic:PartStack" xmi:id="__b3_QO9pEeW_f7WtwrYbtg" elementId="moneycounter.partstack.calendar">
+            <children xsi:type="basic:Part" xmi:id="_A4JI8O9qEeW_f7WtwrYbtg" elementId="moneycounter.part.calendar" tooltip="Календарь"/>
           </children>
         </children>
       </children>
     </children>
     <mainMenu xmi:id="_6wlLicgZEeSyMNYR5xypkQ" elementId="org.eclipse.ui.main.menu">
-      <children xsi:type="menu:Menu" xmi:id="_6wlLisgZEeSyMNYR5xypkQ" elementId="file" label="File">
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_6wlLjcgZEeSyMNYR5xypkQ" elementId="MoneyCounter.handleditem.quit" label="Quit" command="_6wlLfMgZEeSyMNYR5xypkQ"/>
+      <children xsi:type="menu:Menu" xmi:id="_6wlLisgZEeSyMNYR5xypkQ" elementId="file" label="Файл">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_6wlLjcgZEeSyMNYR5xypkQ" elementId="MoneyCounter.handleditem.quit" label="Выйти" command="_6wlLfMgZEeSyMNYR5xypkQ"/>
       </children>
-      <children xsi:type="menu:Menu" xmi:id="_6wlLjsgZEeSyMNYR5xypkQ" elementId="help" label="Help">
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_6wlLj8gZEeSyMNYR5xypkQ" elementId="MoneyCounter.handleditem.about" label="About" command="_6wlLhsgZEeSyMNYR5xypkQ"/>
+      <children xsi:type="menu:Menu" xmi:id="_6wlLjsgZEeSyMNYR5xypkQ" elementId="help" label="Помощь">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_6wlLj8gZEeSyMNYR5xypkQ" elementId="MoneyCounter.handleditem.about" label="О программе" command="_6wlLhsgZEeSyMNYR5xypkQ"/>
       </children>
     </mainMenu>
-    <trimBars xmi:id="_6wlLlcgZEeSyMNYR5xypkQ" elementId="MoneyCounter.trimbar.top"/>
+    <trimBars xmi:id="_6wlLlcgZEeSyMNYR5xypkQ" elementId="MoneyCounter.trimbar.top">
+      <children xsi:type="menu:ToolBar" xmi:id="_9coLsO9mEeW_f7WtwrYbtg" elementId="moneycounter.toolbar.0">
+        <tags>FORCE_TEXT</tags>
+        <children xsi:type="menu:HandledToolItem" xmi:id="__XZPQO9mEeW_f7WtwrYbtg" elementId="moneycounter.handledtoolitem.table" label="Таблица" iconURI="platform:/plugin/MoneyCounter/icons/tab1.png" tooltip="Табличное представление" selected="true" type="Radio" command="_AnViQO9pEeW_f7WtwrYbtg">
+          <tags>FORCE_TEXT</tags>
+          <parameters xmi:id="_rgUFMO9oEeW_f7WtwrYbtg" elementId="moneycounter.parameter.0" name="perspective_parameter" value="MoneyCounter.perspective.tableperspective"/>
+        </children>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_Wq4HYO9oEeW_f7WtwrYbtg" elementId="moneycounter.handledtoolitem.calendar" label="Календарь" iconURI="platform:/plugin/MoneyCounter/icons/time.png" tooltip="Представление в виде календаря" type="Radio" command="_AnViQO9pEeW_f7WtwrYbtg">
+          <tags>FORCE_TEXT</tags>
+          <parameters xmi:id="_wmswMO9oEeW_f7WtwrYbtg" elementId="moneycounter.parameter.1" name="perspective_parameter" value="MoneyCounter.perspective.calendarperspective"/>
+        </children>
+      </children>
+    </trimBars>
   </children>
   <handlers xmi:id="_6wlLfcgZEeSyMNYR5xypkQ" elementId="moneycounter.handler.quitCommand" contributionURI="bundleclass://MoneyCounter/moneycounter.handlers.QuitHandler" command="_6wlLfMgZEeSyMNYR5xypkQ"/>
   <handlers xmi:id="_6wlLh8gZEeSyMNYR5xypkQ" elementId="moneycounter.handler.aboutCommand" contributionURI="bundleclass://MoneyCounter/moneycounter.handlers.AboutHandler" command="_6wlLhsgZEeSyMNYR5xypkQ"/>
+  <handlers xmi:id="_J8HgUO9pEeW_f7WtwrYbtg" elementId="MoneyCounter.handler.showPerspective" contributionURI="bundleclass://MoneyCounter/moneycounter.handlers.ShowPerspective" command="_AnViQO9pEeW_f7WtwrYbtg"/>
   <bindingTables xmi:id="_6wlLfsgZEeSyMNYR5xypkQ" elementId="MoneyCounter.bindingtable" bindingContext="_6wlLecgZEeSyMNYR5xypkQ">
     <bindings xmi:id="_6wlLf8gZEeSyMNYR5xypkQ" elementId="MoneyCounter.keybinding.m1q" keySequence="M1+Q" command="_6wlLfMgZEeSyMNYR5xypkQ"/>
     <bindings xmi:id="_6wlLgsgZEeSyMNYR5xypkQ" elementId="MoneyCounter.keybinding.m1o" keySequence="M1+O"/>
@@ -35,6 +55,9 @@
   </rootContext>
   <commands xmi:id="_6wlLfMgZEeSyMNYR5xypkQ" elementId="org.eclipse.ui.file.exit" commandName="quitCommand"/>
   <commands xmi:id="_6wlLhsgZEeSyMNYR5xypkQ" elementId="org.eclipse.ui.help.aboutAction" commandName="aboutCommand"/>
+  <commands xmi:id="_AnViQO9pEeW_f7WtwrYbtg" elementId="MoneyCounter.command.showPerspective" commandName="showPerspective">
+    <parameters xmi:id="_AnViQe9pEeW_f7WtwrYbtg" elementId="perspective_parameter" name="perspective"/>
+  </commands>
   <addons xmi:id="_6wlLcsgZEeSyMNYR5xypkQ" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_6wlLc8gZEeSyMNYR5xypkQ" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_6wlLdMgZEeSyMNYR5xypkQ" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>

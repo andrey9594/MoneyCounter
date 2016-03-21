@@ -36,7 +36,7 @@ public class SamplePart {
 		parent.setLayout(new GridLayout(1, false));
 
 		txtInput = new Text(parent, SWT.BORDER);
-		txtInput.setMessage("Enter text to mark part as dirty");
+		txtInput.setMessage("Введите запрос");
 		txtInput.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
@@ -47,11 +47,11 @@ public class SamplePart {
 
 		tableViewer = new TableViewer(parent);
 
-		tableViewer.add("Sample item 1");
-		tableViewer.add("Sample item 2");
-		tableViewer.add("Sample item 3");
-		tableViewer.add("Sample item 4");
-		tableViewer.add("Sample item 5");
+		tableViewer.add("Какой-то итем 1");
+		tableViewer.add("Какой-то итем 2");
+		tableViewer.add("Какой-то итем 3");
+		tableViewer.add("Какой-то итем 4");
+		tableViewer.add("Какой-то итем 5");
 		tableViewer.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
