@@ -1,0 +1,42 @@
+Label {
+  font: Tahoma 9px;
+  background-color: #f5deb3;
+  color: black;
+}
+Composite Label {
+  color: black;
+  background-color: #f5deb3;
+}
+Text {
+  font: Tahoma 9px;
+}
+Dialog {
+  color: black;
+  background-color: #f5deb3;
+}
+/* Identifies only those SWT Text elements
+appearing within a Composite */
+Composite Text {
+  background-color: #f5deb3;
+  color: black;
+}
+SashForm {
+  background-color: #e8b658;
+}
+/* background uses a gradient */
+.MTrimBar {
+  background-color: #e8b658 #e8b658;
+  color: #f5deb3;
+  font: Tahoma 9px;
+}
+
+Shell {
+  background-color: #f5deb3 #f5deb3 60%;
+} 
+
+.MTrimmedWindow {
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-left: 5px;
+	margin-right: 5px;
+}

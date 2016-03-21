@@ -3,26 +3,6 @@
 <plugin>
 
    <extension
-         id="product"
-         point="org.eclipse.core.runtime.products">
-      <product
-            name="MoneyCounter"
-            application="org.eclipse.e4.ui.workbench.swt.E4Application">
-         <property
-               name="lifeCycleURI"
-               value="bundleclass://MoneyCounter/moneycounter.E4LifeCycle">
-         </property>
-         <property
-               name="applicationCSS"
-               value="platform:/plugin/MoneyCounter/css/default.css">
-         </property>
-         <property
-               name="appName"
-               value="MoneyCounter">
-         </property>
-      </product>
-   </extension>
-   <extension
          id="MCProduct"
          point="org.eclipse.core.runtime.products">
       <product
@@ -31,6 +11,10 @@
          <property
                name="appName"
                value="MC">
+         </property>
+         <property
+               name="applicationCSS"
+               value="platform:/plugin/MoneyCounter/css/default.css">
          </property>
       </product>
    </extension>
