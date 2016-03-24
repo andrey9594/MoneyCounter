@@ -1,62 +1,90 @@
-/*******************************************************************************
- * Copyright (c) 2010 - 2013 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     IBM Corporation - initial API and implementation
- *     Lars Vogel <lars.Vogel@gmail.com> - Bug 419770
- *******************************************************************************/
 package moneycounter.parts;
 
+import java.sql.Date;
+import java.util.ArrayList;
+
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.di.Persist;
-import org.eclipse.e4.ui.model.application.ui.MDirtyable;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 
+import moneycounter.model.OperationCategory;
+import moneycounter.model.OperationData;
+import moneycounter.model.OperationType;
+import moneycounter.model.TableModel;
+import moneycounter.views.TableView;
+
 public class SamplePart {
+	private TableView view;
+	
+    private ArrayList<Button> typeRadioButtons;
+    private ArrayList<Button> categoryCheckBoxes;
 
 	private Text txtInput;
-	private TableViewer tableViewer;
 
 	@PostConstruct
 	public void createComposite(Composite parent) {
-		parent.setLayout(new GridLayout(1, false));
+		GridLayout gl = new GridLayout(2, false);
+        parent.setLayout(gl);
+        
+        Group groupTypes = new Group(parent, SWT.SHADOW_ETCHED_IN);
+        GridLayout glGroupType = new GridLayout(3, false);
+        groupTypes.setLayout(glGroupType);
+        groupTypes.setText("Баланс");
+        typeRadioButtons = new ArrayList<>();
+        String typeValues[] = {"Все", "Доход", "Расход"};
+        int ind = 0;
+        for (String type : typeValues)
+        {
+            Button newTypeRadioButton = new Button(groupTypes, SWT.RADIO);
+            newTypeRadioButton.setText(type);
+            ind += 1;
+            if (ind == 1)
+            {
+            	newTypeRadioButton.setSelection(true);
+            }
+            typeRadioButtons.add(newTypeRadioButton);
+        }
+        
+        Group groupCategory = new Group(parent, SWT.SHADOW_ETCHED_IN);
+        GridLayout glGroupCategory = new GridLayout(8, false);
+        groupCategory.setLayout(glGroupCategory);
+        groupCategory.setText("Категории");
+        categoryCheckBoxes = new ArrayList<>();
+        String categoryValues[] = {"Продукты", "Столовая", "Зарплата", "Проезд", "Лекарства", "Оплата услуг", "Отдых", "Иное"};
+        for (String category : categoryValues)
+        {
+            Button newCategoryCheckBox = new Button(groupCategory, SWT.CHECK);
+            newCategoryCheckBox.setText(category);
+            newCategoryCheckBox.setSelection(true);
+            categoryCheckBoxes.add(newCategoryCheckBox);
+        }
 
 		txtInput = new Text(parent, SWT.BORDER);
 		txtInput.setMessage("Введите запрос");
-		txtInput.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
-				//
-			}
-		});
-		txtInput.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-		tableViewer = new TableViewer(parent);
-
-		tableViewer.add("Какой-то итем 1");
-		tableViewer.add("Какой-то итем 2");
-		tableViewer.add("Какой-то итем 3");
-		tableViewer.add("Какой-то итем 4");
-		tableViewer.add("Какой-то итем 5");
-		tableViewer.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+        GridData gdForTxt = new GridData();
+        gdForTxt.horizontalSpan = 2;
+        gdForTxt.horizontalAlignment = GridData.FILL;
+        txtInput.setLayoutData(gdForTxt);
+        
+        view = new TableView(parent, 3);
+        
+        TableModel.getInstance().addOperationData(new OperationData(1, OperationType.РАСХОД, new Date(122222222232L), new Date(1223232322L), OperationCategory.ПРОДУКТЫ, "Без комментариев", 100));
+        TableModel.getInstance().addOperationData(new OperationData(2, OperationType.ДОХОД, new Date(122231231231231266L), new Date(121223131231232L), OperationCategory.ЗАРПЛАТА, "Аванс", 9200));
+        
+        view.refreshViewer();
 	}
-
+	
 	@Focus
-	public void setFocus() {
-		tableViewer.getTable().setFocus();
+	public void setFocus()
+	{
+		view.setFocus();
 	}
 }
