@@ -4,9 +4,12 @@
     <tags>shellMaximized</tags>
     <children xsi:type="advanced:PerspectiveStack" xmi:id="_6wlLkMgZEeSyMNYR5xypkQ" elementId="org.eclipse.ui.ide.perspectivestack">
       <children xsi:type="advanced:Perspective" xmi:id="_6wlLkcgZEeSyMNYR5xypkQ" elementId="MoneyCounter.perspective.tableperspective" label="Таблица">
-        <children xsi:type="basic:PartSashContainer" xmi:id="_6wlLksgZEeSyMNYR5xypkQ" elementId="MoneyCounter.partsashcontainer.sample">
-          <children xsi:type="basic:PartStack" xmi:id="_6wlLk8gZEeSyMNYR5xypkQ" elementId="MoneyCounter.partstack.sample">
-            <children xsi:type="basic:Part" xmi:id="_6wlLlMgZEeSyMNYR5xypkQ" elementId="MoneyCounter.part.table" contributionURI="bundleclass://MoneyCounter/moneycounter.parts.SamplePart" label="Таблица"/>
+        <children xsi:type="basic:PartSashContainer" xmi:id="_6wlLksgZEeSyMNYR5xypkQ" elementId="MoneyCounter.partsashcontainer.sample" horizontal="true">
+          <children xsi:type="basic:PartStack" xmi:id="_6wlLk8gZEeSyMNYR5xypkQ" elementId="MoneyCounter.partstack.1" containerData="5000">
+            <children xsi:type="basic:Part" xmi:id="_6wlLlMgZEeSyMNYR5xypkQ" elementId="MoneyCounter.part.table" containerData="" contributionURI="bundleclass://MoneyCounter/moneycounter.parts.TablePart" label="Таблица"/>
+          </children>
+          <children xsi:type="basic:PartStack" xmi:id="_MuXwwPWkEeWQocRxCkLXqQ" elementId="moneycounter.partstack.0" containerData="2860">
+            <children xsi:type="basic:Part" xmi:id="_iE6F8PWjEeWQocRxCkLXqQ" elementId="moneycounter.part.statistics" containerData="" contributionURI="bundleclass://MoneyCounter/moneycounter.parts.StatisticsPart" label="Статистика"/>
           </children>
         </children>
       </children>

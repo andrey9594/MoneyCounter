@@ -1,10 +1,13 @@
 package moneycounter.views;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -23,13 +26,7 @@ public class TableView {
 	private TableModel model = TableModel.getInstance();
 
 	private final String[] titles = { "ID", "Дата и время добавления", "Тип операции", "Дата операции", "Категория",
-			"Комментарий", "Сумма" };
-
-	public void packItems() {
-		for (int i = 0; i < titles.length; i++) {
-			viewer.getTable().getColumn(i).pack();
-		}
-	}
+			"Сумма", "Комментарий"};
 
 	public TableView(Composite parent, int horizontalSpan) {
 		viewer = new TableViewer(new Table(parent, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION));
@@ -47,7 +44,7 @@ public class TableView {
 		comparator = new MyViewerComparator();
 		viewer.setComparator(comparator);
 
-		TableViewerColumn viewerColumn = createTableViewerColumn(titles[0], 0);
+		TableViewerColumn viewerColumn = createTableViewerColumn(titles[0], 0, 42);
 		viewerColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) // ID
@@ -57,7 +54,7 @@ public class TableView {
 			}
 		});
 		
-		viewerColumn = createTableViewerColumn(titles[1], 1);
+		viewerColumn = createTableViewerColumn(titles[1], 1, 210);
 		viewerColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) // Дата и время добавления
@@ -67,7 +64,7 @@ public class TableView {
 			}
 		});
 		
-		viewerColumn = createTableViewerColumn(titles[2], 2);
+		viewerColumn = createTableViewerColumn(titles[2], 2, 128);
 		viewerColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) // Тип операции
@@ -77,7 +74,7 @@ public class TableView {
 			}
 		});	
 		
-		viewerColumn = createTableViewerColumn(titles[3], 3);
+		viewerColumn = createTableViewerColumn(titles[3], 3, 133);
 		viewerColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) // Дата операции
@@ -87,7 +84,7 @@ public class TableView {
 			}
 		});
 		
-		viewerColumn = createTableViewerColumn(titles[4], 4);
+		viewerColumn = createTableViewerColumn(titles[4], 4, 125);
 		viewerColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) // Категория
@@ -97,7 +94,17 @@ public class TableView {
 			}
 		});
 		
-		viewerColumn = createTableViewerColumn(titles[5], 5);
+		viewerColumn = createTableViewerColumn(titles[5], 5, 75);
+		viewerColumn.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) // Сумма
+			{
+				OperationData data = (OperationData) element;
+				return "" + data.getSum();
+			}
+		});
+		
+		viewerColumn = createTableViewerColumn(titles[6], 6, 400);
 		viewerColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) // Комментарий
@@ -107,13 +114,20 @@ public class TableView {
 			}
 		});
 		
-		viewerColumn = createTableViewerColumn(titles[6], 6);
-		viewerColumn.setLabelProvider(new ColumnLabelProvider() {
+		viewer.getTable().addKeyListener(new KeyListener() {
 			@Override
-			public String getText(Object element) // Сумма
-			{
-				OperationData data = (OperationData) element;
-				return "" + data.getSum();
+			public void keyReleased(KeyEvent e) {}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.character == SWT.DEL)
+				{
+					// ЗАПИСИ ТОЖЕ ЖЕ ЖЕЖ!
+					if (MessageDialog.openQuestion(parent.getShell(), "Подтверждение удаления", "Вы действительно хотите удалить эту запись?")) {
+						MessageDialog.openConfirm(parent.getShell(), "Успешно", "Запись будет удалена!");
+					}
+						
+				}
 			}
 		});
 
@@ -122,12 +136,13 @@ public class TableView {
 
 	}
 
-	private TableViewerColumn createTableViewerColumn(String title, final int colNumber) {
+	private TableViewerColumn createTableViewerColumn(String title, final int colNumber, int length) {
 		TableViewerColumn viewerColumn = new TableViewerColumn(viewer, SWT.NONE);
 		final TableColumn column = viewerColumn.getColumn();
 		column.setText(title);
 		column.setAlignment(SWT.LEFT);
 		column.setResizable(true);
+		column.setWidth(length);
 		column.setMoveable(true);
 		column.addSelectionListener(getSelectionAdapter(column, colNumber));
 		return viewerColumn;
@@ -151,12 +166,7 @@ public class TableView {
     {
         viewer.getTable().setVisible(false);
         viewer.refresh();
-        packItems();
         viewer.getTable().setVisible(true);
     }
-    
-    public void setFocus()
-    {
-//        viewer.getControl().setFocus();
-    }
+  
 }

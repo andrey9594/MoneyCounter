@@ -5,8 +5,10 @@ import java.util.ArrayList;
 
 import javax.annotation.PostConstruct;
 
-import org.eclipse.e4.ui.di.Focus;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -14,15 +16,18 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 
+import moneycounter.dialogs.AddingDialog;
 import moneycounter.model.OperationCategory;
 import moneycounter.model.OperationData;
 import moneycounter.model.OperationType;
 import moneycounter.model.TableModel;
 import moneycounter.views.TableView;
 
-public class SamplePart {
+public class TablePart {
 	private TableView view;
 	
+	private Button addButton;
+	private Button reportButton;
     private ArrayList<Button> typeRadioButtons;
     private ArrayList<Button> categoryCheckBoxes;
 
@@ -30,7 +35,7 @@ public class SamplePart {
 
 	@PostConstruct
 	public void createComposite(Composite parent) {
-		GridLayout gl = new GridLayout(2, false);
+		GridLayout gl = new GridLayout(3, false);
         parent.setLayout(gl);
         
         Group groupTypes = new Group(parent, SWT.SHADOW_ETCHED_IN);
@@ -65,26 +70,54 @@ public class SamplePart {
             newCategoryCheckBox.setSelection(true);
             categoryCheckBoxes.add(newCategoryCheckBox);
         }
+        
+        Group groupCommands = new Group(parent, SWT.SHADOW_ETCHED_IN);
+        GridLayout glGroupCommands = new GridLayout(2, false);
+        groupCommands.setLayout(glGroupCommands);
+        groupCommands.setText("Управление данными");
+        //
+        addButton = new Button(groupCommands, SWT.PUSH);
+        addButton.setText("Добавить");
+        addButton.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				AddingDialog dialog = new AddingDialog(parent.getShell());
+				OperationData newData = dialog.open();
+				if (newData != null) {
+					// добавляем новые данные
+				}
+				
+			}
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {}
+		});
+        //
+        reportButton = new Button(groupCommands, SWT.PUSH);
+        reportButton.setText("Создать отчет");
+        reportButton.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				MessageDialog.openInformation(parent.getShell(), "Hey", "Hello2!");
+				
+			}
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {}
+		});
 
 		txtInput = new Text(parent, SWT.BORDER);
 		txtInput.setMessage("Введите запрос");
 		
         GridData gdForTxt = new GridData();
-        gdForTxt.horizontalSpan = 2;
+        gdForTxt.horizontalSpan = 3;
         gdForTxt.horizontalAlignment = GridData.FILL;
         txtInput.setLayoutData(gdForTxt);
         
         view = new TableView(parent, 3);
         
-        TableModel.getInstance().addOperationData(new OperationData(1, OperationType.РАСХОД, new Date(122222222232L), new Date(1223232322L), OperationCategory.ПРОДУКТЫ, "Без комментариев", 100));
-        TableModel.getInstance().addOperationData(new OperationData(2, OperationType.ДОХОД, new Date(122231231231231266L), new Date(121223131231232L), OperationCategory.ЗАРПЛАТА, "Аванс", 9200));
+        TableModel.getInstance().addOperationData(new OperationData(1, OperationType.РАСХОД, new Date(122222222232L), new Date(1223232322L), OperationCategory.ПРОДУКТЫ, "Без комментариев", 21100));
+        TableModel.getInstance().addOperationData(new OperationData(2, OperationType.ДОХОД, new Date(12223123123123126L), new Date(12122313123122L), OperationCategory.ЗАРПЛАТА, "Аванс", 9200));
+        TableModel.getInstance().addOperationData(new OperationData(3, OperationType.РАСХОД, new Date(123222222222232L), new Date(51223232322L), OperationCategory.ОПЛАТА_УСЛУГ, "Без комментариев", 500));
         
         view.refreshViewer();
-	}
-	
-	@Focus
-	public void setFocus()
-	{
-		view.setFocus();
 	}
 }
