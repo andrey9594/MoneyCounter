@@ -1,5 +1,7 @@
 package moneycounter.views;
 
+import java.sql.Date;
+
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -12,6 +14,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
@@ -60,7 +63,8 @@ public class TableView {
 			public String getText(Object element) // Дата и время добавления
 			{
 				OperationData data = (OperationData) element;
-				return data.getTimestamp().toString();
+				//return data.getTimestamp().toString();
+				return new Date(data.getTimestamp().getTime()).toString();
 			}
 		});
 		
@@ -80,7 +84,8 @@ public class TableView {
 			public String getText(Object element) // Дата операции
 			{
 				OperationData data = (OperationData) element;
-				return data.getDate().toString();
+				//return data.getDate().toString();
+				return new Date(data.getDate().getTime()).toString();
 			}
 		});
 		
@@ -94,7 +99,7 @@ public class TableView {
 			}
 		});
 		
-		viewerColumn = createTableViewerColumn(titles[5], 5, 75);
+		viewerColumn = createTableViewerColumn(titles[5], 5, 85);
 		viewerColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) // Сумма

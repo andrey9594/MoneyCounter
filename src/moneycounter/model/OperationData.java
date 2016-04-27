@@ -1,6 +1,6 @@
 package moneycounter.model;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Objects;
 
 /**
@@ -21,12 +21,12 @@ public class OperationData {
 	/**
 	 * Дата и время добавления записи
 	 */
-	private Date timestamp;
+	private Timestamp timestamp;
 	
 	/**
 	 * Дата операции 
 	 */ 
-	private Date date;
+	private Timestamp date;
 	
 	/**
 	 * Категория, к которой относится операция
@@ -43,7 +43,7 @@ public class OperationData {
 	 */
 	private double sum;
 	
-	public OperationData(int id, OperationType operationType, Date timestamp, Date date, OperationCategory category, String comment, double sum)
+	public OperationData(int id, OperationType operationType, Timestamp timestamp, Timestamp date, OperationCategory category, String comment, double sum)
 	{
 		Objects.requireNonNull(operationType, "Operation type cannot be null!");
 		Objects.requireNonNull(category, "Category cannot be null!");
@@ -73,19 +73,19 @@ public class OperationData {
 		this.operationType = operationType;
 	}
 
-	public Date getTimestamp() {
+	public Timestamp getTimestamp() {
 		return timestamp;
 	}
 
-	public void setTimestamp(Date timestamp) {
+	public void setTimestamp(Timestamp timestamp) {
 		this.timestamp = timestamp;
 	}
 
-	public Date getDate() {
+	public Timestamp getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(Timestamp date) {
 		this.date = date;
 	}
 

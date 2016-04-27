@@ -59,11 +59,11 @@ public class MyViewerComparator extends ViewerComparator
             case 0: // ID
                 rc = new Integer(p1.getId()).compareTo(p2.getId());
                 break;
-            case 1: // Тип операции
-                rc = p1.getOperationType().name().compareTo(p2.getOperationType().name());
-                break;
-            case 2: // Дата и время добавления
+            case 1: // Дата и время добавления
                 rc = p1.getTimestamp().compareTo(p2.getTimestamp());
+                break;
+            case 2: // Тип операции
+                rc = p1.getOperationType().name().compareTo(p2.getOperationType().name());
                 break;
             case 3: // Дата операции
                 rc = p1.getDate().compareTo(p2.getDate());
@@ -71,11 +71,11 @@ public class MyViewerComparator extends ViewerComparator
             case 4: // Категория
                 rc = p1.getCategory().name().compareTo(p2.getCategory().name());
                 break;
-            case 5: // Комментарий
-                rc = p1.getComment().compareTo(p2.getComment());
-                break;
-            case 6: // Сумма
+            case 5: // Сумма
             	rc = new Double(p1.getSum()).compareTo(p2.getSum());
+                break;
+            case 6: // Комментарий
+                rc = p1.getComment().compareTo(p2.getComment());
                 break;
             default:
                 rc = 0;

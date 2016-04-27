@@ -7,9 +7,24 @@
    </configIni>
 
    <launcherArgs>
+      <vmArgs>-DdbUrl=jdbc:postgresql://localhost:5432/money
+-DdbUser=postgres
+-DdbPassword=csc
+      </vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
    </launcherArgs>
+
+   <launcher>
+      <linux icon="/MoneyCounter/icons/money.xpm"/>
+      <solaris/>
+      <win useIco="false">
+         <bmp/>
+      </win>
+   </launcher>
+
+   <vm>
+   </vm>
 
    <plugins>
       <plugin id="MoneyCounter"/>
@@ -84,6 +99,7 @@
       <plugin id="org.w3c.dom.events"/>
       <plugin id="org.w3c.dom.smil"/>
       <plugin id="org.w3c.dom.svg"/>
+      <plugin id="posgtresplugin"/>
    </plugins>
 
    <configurations>

@@ -3,28 +3,28 @@ package moneycounter;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
-public class Activator implements BundleActivator {
+import moneycounter.dao.OperationDAO;
+import moneycounter.dao.impl.OperationDAOImpl;
 
-	private static BundleContext context;
+public class Activator implements BundleActivator {
+	private static BundleContext context;	
+	
+	private static OperationDAO dao = new OperationDAOImpl();
+	
+	public static OperationDAO getDao() {
+		return dao;
+	}
 
 	static BundleContext getContext() {
 		return context;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
-	 */
 	public void start(BundleContext bundleContext) throws Exception {
-		Activator.context = bundleContext;
+		Activator.context = bundleContext;		
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
-	 */
 	public void stop(BundleContext bundleContext) throws Exception {
+		dao.close();
 		Activator.context = null;
 	}
-
 }

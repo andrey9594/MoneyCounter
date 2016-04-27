@@ -1,12 +1,14 @@
 package moneycounter.parts;
 
-import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -16,6 +18,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 
+import moneycounter.Activator;
 import moneycounter.dialogs.AddingDialog;
 import moneycounter.model.OperationCategory;
 import moneycounter.model.OperationData;
@@ -26,12 +29,51 @@ import moneycounter.views.TableView;
 public class TablePart {
 	private TableView view;
 	
+	private TableModel model = TableModel.getInstance();
+	
 	private Button addButton;
 	private Button reportButton;
     private ArrayList<Button> typeRadioButtons;
     private ArrayList<Button> categoryCheckBoxes;
 
 	private Text txtInput;
+	
+	private void loadDB() {
+		model.clear();
+		for (OperationData data : Activator.getDao().getAllData()) {
+			model.addOperationData(data);
+		}
+		view.refreshViewer();
+	}
+	
+	private void refresh() {
+		model.clear();
+		
+		Set<OperationType> typeSet = new HashSet<>();
+		for (Button typeButton : typeRadioButtons) {
+			if (typeButton.getSelection()) {
+				if (typeButton.getText().toLowerCase().equals("все")) {
+					for (OperationType type : OperationType.values()) {
+						typeSet.add(type);
+					}
+				} else {
+					typeSet.add(OperationType.getByDescription(typeButton.getText()));
+				}
+			}
+		}
+		
+		Set <OperationCategory> categorySet = new HashSet<>();
+		for (Button categoryButton : categoryCheckBoxes) {
+			if (categoryButton.getSelection()) {
+				categorySet.add(OperationCategory.getByDescription(categoryButton.getText()));
+			}
+		}
+		
+		for (OperationData data : Activator.getDao().getDataByTypeAndCategory(typeSet, categorySet)) {
+			model.addOperationData(data);
+		}
+		view.refreshViewer();
+	}
 
 	@PostConstruct
 	public void createComposite(Composite parent) {
@@ -55,6 +97,12 @@ public class TablePart {
             	newTypeRadioButton.setSelection(true);
             }
             typeRadioButtons.add(newTypeRadioButton);
+            newTypeRadioButton.addSelectionListener(new SelectionAdapter() {
+            	public void widgetSelected(SelectionEvent e) {
+            		if (newTypeRadioButton.getSelection())
+            			refresh();
+            	};
+			});
         }
         
         Group groupCategory = new Group(parent, SWT.SHADOW_ETCHED_IN);
@@ -69,6 +117,11 @@ public class TablePart {
             newCategoryCheckBox.setText(category);
             newCategoryCheckBox.setSelection(true);
             categoryCheckBoxes.add(newCategoryCheckBox);
+            newCategoryCheckBox.addSelectionListener(new SelectionAdapter() {
+            	public void widgetSelected(SelectionEvent e) {
+            		refresh();
+            	};
+			});
         }
         
         Group groupCommands = new Group(parent, SWT.SHADOW_ETCHED_IN);
@@ -82,11 +135,12 @@ public class TablePart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				AddingDialog dialog = new AddingDialog(parent.getShell());
+				parent.setEnabled(false);
 				OperationData newData = dialog.open();
 				if (newData != null) {
 					// добавляем новые данные
 				}
-				
+				parent.setEnabled(true);
 			}
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {}
@@ -114,10 +168,6 @@ public class TablePart {
         
         view = new TableView(parent, 3);
         
-        TableModel.getInstance().addOperationData(new OperationData(1, OperationType.РАСХОД, new Date(122222222232L), new Date(1223232322L), OperationCategory.ПРОДУКТЫ, "Без комментариев", 21100));
-        TableModel.getInstance().addOperationData(new OperationData(2, OperationType.ДОХОД, new Date(12223123123123126L), new Date(12122313123122L), OperationCategory.ЗАРПЛАТА, "Аванс", 9200));
-        TableModel.getInstance().addOperationData(new OperationData(3, OperationType.РАСХОД, new Date(123222222222232L), new Date(51223232322L), OperationCategory.ОПЛАТА_УСЛУГ, "Без комментариев", 500));
-        
-        view.refreshViewer();
+        loadDB();
 	}
 }
