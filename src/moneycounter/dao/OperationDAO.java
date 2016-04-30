@@ -12,5 +12,9 @@ public interface OperationDAO {
 	
 	List<OperationData> getDataByTypeAndCategory(Set <OperationType> type, Set<OperationCategory> category);
 	
+	void addOperation(OperationData data);
+	
+	void removeOperation(int id);
+	
 	void close();
 }

@@ -1,6 +1,11 @@
 package moneycounter.views;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -8,17 +13,22 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
+import moneycounter.Activator;
+import moneycounter.dialogs.StatisticsInfoDialog;
+import moneycounter.model.OperationCategory;
 import moneycounter.model.OperationData;
+import moneycounter.model.OperationType;
 import moneycounter.model.TableModel;
 
 public class TableView {
@@ -107,6 +117,16 @@ public class TableView {
 				OperationData data = (OperationData) element;
 				return "" + data.getSum();
 			}
+			
+			@Override
+			public Color getBackground(Object element) {
+				ArrayList list = (ArrayList) viewer.getInput();
+				int index = list.indexOf(element);
+				if (TableModel.getInstance().getData().get(index).getOperationType() == OperationType.ДОХОД)
+					return new Color(viewer.getTable().getDisplay(), new RGB(168, 222, 113));
+				else
+					return new Color(viewer.getTable().getDisplay(), new RGB(210, 84, 84));
+			}
 		});
 		
 		viewerColumn = createTableViewerColumn(titles[6], 6, 400);
@@ -119,19 +139,50 @@ public class TableView {
 			}
 		});
 		
-		viewer.getTable().addKeyListener(new KeyListener() {
-			@Override
-			public void keyReleased(KeyEvent e) {}
-			
+		viewer.getTable().addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if (e.character == SWT.DEL)
-				{
-					// ЗАПИСИ ТОЖЕ ЖЕ ЖЕЖ!
-					if (MessageDialog.openQuestion(parent.getShell(), "Подтверждение удаления", "Вы действительно хотите удалить эту запись?")) {
-						MessageDialog.openConfirm(parent.getShell(), "Успешно", "Запись будет удалена!");
+				if (e.character == SWT.DEL) {
+					String bodyQuestion = "Вы действительно хотите удалить эту запись?";
+					String bodyInformation = "Запись была удалена!";
+					if (viewer.getTable().getSelectionIndices().length > 1) {
+						bodyQuestion = "Вы действительно хотите удалить эти записи?";
+						bodyInformation = "Записи были удалены";
+					}
+					if (MessageDialog.openQuestion(parent.getShell(), "Подтверждение удаления", bodyQuestion)) {
+						for (int index : viewer.getTable().getSelectionIndices()) {
+							int id = Integer.parseInt(viewer.getTable().getItem(index).getText(0));
+							model.deleteById(id);
+							Activator.getDao().removeOperation(id);
+						}
+						refreshViewer();
+						
+						MessageDialog.openInformation(parent.getShell(), "Успешно", bodyInformation);
 					}
 						
+				}
+				if ((e.character == SWT.CR || e.character == SWT.LF)) {
+					Set <String> dates = new TreeSet<>();
+					double totalSum = 0;
+					Map <OperationCategory, Double> sumMap = new HashMap<>();
+					 
+					for (int index : viewer.getTable().getSelectionIndices()) {
+						if (OperationType.getByDescription(viewer.getTable().getItem(index).getText(2)) == OperationType.ДОХОД)
+							continue;
+						OperationCategory category = OperationCategory.getByDescription(viewer.getTable().getItem(index).getText(4));
+						Double sum = sumMap.get(category);
+						if (sum == null)
+							sum = 0.;
+						sum += Double.parseDouble(viewer.getTable().getItem(index).getText(5));
+						sumMap.put(category, sum);
+						totalSum += Double.parseDouble(viewer.getTable().getItem(index).getText(5));
+						dates.add(viewer.getTable().getItem(index).getText(1));
+					}
+					if (dates.size() != 0) {
+						StatisticsInfoDialog dialog = new StatisticsInfoDialog(viewer.getTable().getShell(), totalSum,
+								sumMap, dates.size());
+						dialog.open();
+					}
 				}
 			}
 		});
@@ -167,8 +218,7 @@ public class TableView {
 		return selectionAdapter;
 	}
 	
-    public void refreshViewer()
-    {
+    public void refreshViewer() {
         viewer.getTable().setVisible(false);
         viewer.refresh();
         viewer.getTable().setVisible(true);

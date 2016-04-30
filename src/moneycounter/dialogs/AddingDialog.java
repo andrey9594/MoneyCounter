@@ -1,5 +1,6 @@
 package moneycounter.dialogs;
 
+import java.sql.Timestamp;
 import java.util.function.Function;
 
 import org.eclipse.swt.SWT;
@@ -26,6 +27,9 @@ public class AddingDialog {
 
 	private static final int HEIGHT = 570;
 	private static final int WIDTH = 243;
+	
+	private OperationData newOperationData;
+	
 
 	public AddingDialog(Shell parent) {
 		shell = new Shell(parent);
@@ -119,25 +123,18 @@ public class AddingDialog {
 		
 		Group groupForComment = new Group(shell, SWT.SHADOW_ETCHED_IN);
 		GridLayout glGroupForComment = new GridLayout(1, true);
-		GridData gdGroupForComment = new GridData();
-		gdGroupForComment.horizontalAlignment = SWT.FILL;
-		gdGroupForComment.verticalAlignment = SWT.FILL;
-		gdGroupForComment.verticalSpan = 3;
-		gdGroupForComment.grabExcessVerticalSpace = true;
+		GridData gdGroupForComment = new GridData(SWT.FILL, SWT.FILL, true, true);
 		groupForComment.setLayout(glGroupForComment);
 		groupForComment.setLayoutData(gdGroupForComment);
 		
 		Label lblComment = new Label(groupForComment, SWT.NONE);
 		lblComment.setText("Введите комментарий:");
 		
-		Text txtComment = new Text(groupForComment, SWT.NONE);
-		GridData gdForTxtComment = new GridData(GridData.FILL_BOTH);
-//		gdForTxtComment.horizontalAlignment = SWT.FILL;
-		gdForTxtComment.grabExcessHorizontalSpace = true;
-		gdForTxtComment.grabExcessVerticalSpace = true;
-//		gdForTxtComment.verticalAlignment = SWT.FILL;
-		gdForTxtComment.verticalSpan = 3;
+		Text txtComment = new Text(groupForComment, SWT.WRAP);
+		GridData gdForTxtComment = new GridData(SWT.FILL, SWT.FILL, true, true);
+
 		txtComment.setLayoutData(gdForTxtComment);
+	
 		txtComment.setText("Комментарий");
 		txtComment.addMouseListener(new MouseAdapter() {
 			public void mouseDown(org.eclipse.swt.events.MouseEvent e) {
@@ -158,6 +155,17 @@ public class AddingDialog {
 		groupForButton.setLayoutData(gdGroupForButton);
 		Button buttonOk = new Button(groupForButton, SWT.PUSH);
 		buttonOk.setText("Добавить");
+		buttonOk.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				newOperationData.setOperationType(OperationType.getByDescription(comboOperationType.getText()));
+				newOperationData.setDate(new Timestamp(calendar.getYear(), calendar.getMonth(), calendar.getDay(), 0, 0, 0, 0));
+				newOperationData.setCategory(OperationCategory.getByDescription(comboCategoryType.getText()));
+				newOperationData.setSum(Double.parseDouble(txtSum.getText()));
+				newOperationData.setComment(txtComment.getText());
+				
+				shell.close();
+			};
+		});
 		Button buttonCancel = new Button(groupForButton, SWT.PUSH);
 		buttonCancel.setText("Отмена");
 		buttonCancel.addSelectionListener(new SelectionAdapter() {
@@ -173,6 +181,6 @@ public class AddingDialog {
 			if (!shell.getDisplay().readAndDispatch())
 				shell.getDisplay().sleep();
 		}
-		return null;
+		return newOperationData;
 	}
 }

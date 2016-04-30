@@ -100,4 +100,24 @@ public class OperationDAOImpl implements OperationDAO {
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public void addOperation(OperationData data) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeOperation(int id) {
+		try {
+			Statement stmt = connection.createStatement();
+			stmt.execute("DELETE FROM operationdata WHERE id = " + id);
+		} catch (SQLException e) {
+			System.out.println("Cant remove OperationData with id = " + id);
+			e.printStackTrace();
+		}
+		
+	}
+
+	
 }

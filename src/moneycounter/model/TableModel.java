@@ -31,4 +31,13 @@ public class TableModel {
 	public List<OperationData> getData() {
 		return data;
 	}
+	
+	public void deleteById(int id) {
+		for (OperationData curData : data) {
+			if (curData.getId() == id) {
+				data.remove(curData);
+				return;
+			}
+		}
+	}
 }
