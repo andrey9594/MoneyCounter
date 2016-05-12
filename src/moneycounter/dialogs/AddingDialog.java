@@ -13,8 +13,10 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.DateTime;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
@@ -173,6 +175,20 @@ public class AddingDialog {
 				shell.close();
 			};
 		});
+		
+		Listener listenerForAdding = new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				if (event.type == SWT.KeyDown && (event.character == SWT.CR || event.character == SWT.LF)) {
+					buttonOk.notifyListeners(SWT.Selection, new Event());
+				}
+			}
+		};
+
+		buttonOk.addListener(SWT.KeyDown, listenerForAdding);
+		buttonCancel.addListener(SWT.KeyDown, listenerForAdding);
+		txtSum.addListener(SWT.KeyDown, listenerForAdding);
+		txtComment.addListener(SWT.KeyDown, listenerForAdding);
 	}	
 
 	public OperationData open() {
