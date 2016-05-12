@@ -112,4 +112,10 @@ public class OperationData {
 	public void setSum(double sum) {
 		this.sum = sum;
 	}
+	
+	@Override
+	public String toString() {
+		return "operationData [id=" + id + ", operationType=" + operationType.name() + ", timestamp=" + timestamp + 
+				", date=" + date + ", category=" + category.name() + ", comment=" + comment + ", sum=" + sum + "]";
+	}
 }

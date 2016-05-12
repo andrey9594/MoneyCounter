@@ -5,7 +5,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -27,6 +30,9 @@ import moneycounter.model.TableModel;
 import moneycounter.views.TableView;
 
 public class TablePart {
+	@Inject
+	EPartService partService;
+	
 	private TableView view;
 	
 	private TableModel model = TableModel.getInstance();
@@ -47,8 +53,7 @@ public class TablePart {
 	}
 	
 	private void refresh() {
-		model.clear();
-		
+		model.clear();	
 		Set<OperationType> typeSet = new HashSet<>();
 		for (Button typeButton : typeRadioButtons) {
 			if (typeButton.getSelection()) {
@@ -73,6 +78,8 @@ public class TablePart {
 			model.addOperationData(data);
 		}
 		view.refreshViewer();
+		MPart statisticsPart = partService.findPart("moneycounter.part.statistics");
+		((StatisticsPart)(statisticsPart.getObject())).updateStatistics();
 	}
 
 	@PostConstruct
@@ -138,7 +145,8 @@ public class TablePart {
 				parent.setEnabled(false);
 				OperationData newData = dialog.open();
 				if (newData != null) {
-					// добавляем новые данные
+					Activator.getDao().addOperation(newData);
+					refresh();
 				}
 				parent.setEnabled(true);
 			}

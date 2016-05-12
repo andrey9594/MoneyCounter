@@ -135,7 +135,7 @@ public class AddingDialog {
 
 		txtComment.setLayoutData(gdForTxtComment);
 	
-		txtComment.setText("Комментарий");
+		txtComment.setText(" ");
 		txtComment.addMouseListener(new MouseAdapter() {
 			public void mouseDown(org.eclipse.swt.events.MouseEvent e) {
 				txtComment.setSelection(0, txtComment.getText().length());
@@ -157,12 +157,12 @@ public class AddingDialog {
 		buttonOk.setText("Добавить");
 		buttonOk.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				newOperationData.setOperationType(OperationType.getByDescription(comboOperationType.getText()));
-				newOperationData.setDate(new Timestamp(calendar.getYear(), calendar.getMonth(), calendar.getDay(), 0, 0, 0, 0));
-				newOperationData.setCategory(OperationCategory.getByDescription(comboCategoryType.getText()));
-				newOperationData.setSum(Double.parseDouble(txtSum.getText()));
-				newOperationData.setComment(txtComment.getText());
-				
+				OperationType operationType = OperationType.getByDescription(comboOperationType.getText());
+				Timestamp date = new Timestamp(calendar.getYear() - 1900, calendar.getMonth(), calendar.getDay(), 0, 0, 0, 0);
+				OperationCategory category = OperationCategory.getByDescription(comboCategoryType.getText());
+				Double sum = Double.parseDouble(txtSum.getText());
+				String comment = txtComment.getText();
+				newOperationData = new OperationData(-1, operationType, null, date, category, comment, sum);
 				shell.close();
 			};
 		});

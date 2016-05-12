@@ -46,9 +46,9 @@ public class StatisticsInfoDialog {
 			Double sum = sumMap.get(category);
 			if (sum == null)
 				sum = 0.;
-			message += category.getDescription() + " = " + sum + " рублей или " + sum / dateCount + " рублей/день\n";
+			message += category.getDescription() + " = " + sum + " рублей или " + String.format("%.2f", sum / dateCount) + " рублей/день\n";
 		}
-		message += "Всего = " + totalSum + " рублей или " + totalSum / dateCount + " рублей/день\n";
+		message += "Всего = " + totalSum + " рублей или " + String.format("%.2f", totalSum / dateCount) + " рублей/день\n";
 		Label lblInfo = new Label(shell, SWT.NONE);
  		lblInfo.setText(message);
  		lblInfo.setVisible(true);

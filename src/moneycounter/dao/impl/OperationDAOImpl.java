@@ -14,6 +14,7 @@ import moneycounter.dao.OperationDAO;
 import moneycounter.model.OperationCategory;
 import moneycounter.model.OperationData;
 import moneycounter.model.OperationType;
+import moneycounter.model.TableModel;
 
 public class OperationDAOImpl implements OperationDAO {
 	private Connection connection;
@@ -103,9 +104,31 @@ public class OperationDAOImpl implements OperationDAO {
 
 	@Override
 	public void addOperation(OperationData data) {
-		// TODO Auto-generated method stub
+		Statement stmt;
+		try {
+			stmt = connection.createStatement();
+			String getOperationTypeIdForTypeSql = "SELECT id FROM Operationtype WHERE name = '" + data.getOperationType().getDescription() + "'";
+			ResultSet cursorForOperationType = stmt.executeQuery(getOperationTypeIdForTypeSql);
+			cursorForOperationType.next();
+			int operationId = cursorForOperationType.getInt(1);
+			
+			String getOperationCategoryIdForTypeSql = "SELECT id FROM Operationcategory WHERE name = '" + data.getCategory().getDescription() + "'";
+			ResultSet cursorForOperationCategory = stmt.executeQuery(getOperationCategoryIdForTypeSql);
+			cursorForOperationCategory.next();
+			int categoryId = cursorForOperationCategory.getInt(1);
+			
+			Statement insertStmt = connection.createStatement();
+			String insertScript = "INSERT INTO Operationdata(operation_id, operation_data, category_id, sum, comment) VALUES (" 
+					+ operationId + ", '" + data.getDate() + "', " + categoryId + ", " + data.getSum() + ", '" + data.getComment() + "')";
+			insertStmt.execute(insertScript);
+			
+			TableModel.getInstance().addOperationData(data);
+		} catch (SQLException e) {
+			System.out.println("Cannot insert the operation");
+			e.printStackTrace();
+		}
 		
-	}
+			}
 
 	@Override
 	public void removeOperation(int id) {

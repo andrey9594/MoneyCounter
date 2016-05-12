@@ -15,7 +15,7 @@
       </vmArgsMac>
    </launcherArgs>
 
-   <launcher>
+   <launcher name="moneycounter">
       <linux icon="/MoneyCounter/icons/money.xpm"/>
       <solaris/>
       <win useIco="false">

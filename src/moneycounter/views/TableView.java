@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.inject.Inject;
+
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -32,6 +35,9 @@ import moneycounter.model.OperationType;
 import moneycounter.model.TableModel;
 
 public class TableView {
+	@Inject
+	EPartService partService;
+	
 	private TableViewer viewer;
 
 	private MyViewerComparator comparator;
@@ -84,7 +90,7 @@ public class TableView {
 			public String getText(Object element) // Тип операции
 			{
 				OperationData data = (OperationData) element;
-				return data.getOperationType().name().charAt(0) + data.getOperationType().name().substring(1).toLowerCase();
+				return data.getOperationType().getDescription().charAt(0) + data.getOperationType().getDescription().substring(1).toLowerCase();
 			}
 		});	
 		
@@ -105,7 +111,7 @@ public class TableView {
 			public String getText(Object element) // Категория
 			{
 				OperationData data = (OperationData) element;
-				return data.getCategory().name().charAt(0) + data.getCategory().name().substring(1).toLowerCase();
+				return data.getCategory().getDescription().charAt(0) + data.getCategory().getDescription().substring(1).toLowerCase();
 			}
 		});
 		
@@ -156,7 +162,7 @@ public class TableView {
 							Activator.getDao().removeOperation(id);
 						}
 						refreshViewer();
-						
+							
 						MessageDialog.openInformation(parent.getShell(), "Успешно", bodyInformation);
 					}
 						
@@ -176,7 +182,7 @@ public class TableView {
 						sum += Double.parseDouble(viewer.getTable().getItem(index).getText(5));
 						sumMap.put(category, sum);
 						totalSum += Double.parseDouble(viewer.getTable().getItem(index).getText(5));
-						dates.add(viewer.getTable().getItem(index).getText(1));
+						dates.add(viewer.getTable().getItem(index).getText(3));
 					}
 					if (dates.size() != 0) {
 						StatisticsInfoDialog dialog = new StatisticsInfoDialog(viewer.getTable().getShell(), totalSum,
